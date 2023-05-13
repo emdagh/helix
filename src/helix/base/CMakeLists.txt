@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.11)
+project(helix.base)
+file(GLOB SRC *.cpp)
+add_library(${PROJECT_NAME} STATIC ${SRC})
+add_subdirectory(platform)
