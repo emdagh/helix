@@ -1,0 +1,3 @@
+[submodule "vendor/libcester"]
+	path = vendor/libcester
+	url = https://github.com/exoticlibraries/libcester.git

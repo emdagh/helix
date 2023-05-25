@@ -1,4 +1,5 @@
 #include "application.h"
+#include "factory.h"
 #include <X11/Xlib.h>
 
 namespace helix
@@ -28,5 +29,45 @@ public:
     {
         XCloseDisplay(_dpy);
     }
+
+    virtual int init()
+    {
+        return -1;
+    }
+    virtual int deinit()
+    {
+        return -1;
+    }
+
+    virtual int start()
+    {
+        return -1;
+    }
+
+    virtual int pause()
+    {
+        return -1;
+    }
+
+    virtual int stop()
+    {
+        return -1;
+    }
 };
+
+// application_factory::instance().
+// register_factory<application, x11_application, std::string>("base.application.x11");
+
+static class __reg
+{
+public:
+    __reg()
+    {
+        register_factory<application, x11_application>(
+            "helix.base.x11_application"); //, [] { return static_cast<application*>(new
+                                           // x11_application);
+    }
+} __reg_f;
+//});
+
 } // namespace helix

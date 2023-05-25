@@ -1,29 +1,23 @@
 #pragma once
+#include "singleton.h"
 #include <string>
 #include <unordered_map>
+
 namespace helix
 {
-template <typename T, typename Key = std::string> class factory
+template <typename T, typename Key = std::string> class factory : public singleton<factory<T, Key>>
 {
     typedef T* (*create_fun)();
     std::unordered_map<Key, create_fun> _map;
 
 public:
-    static factory& instance()
-    {
-        static factory* _ = new factory;
-        return *_;
-    }
+    factory() = default;
+    virtual ~factory() = default;
+    factory(const factory&) = delete;
+    factory& operator=(const factory&) const = delete;
 
 public:
-    factory()
-    {
-    }
-    virtual ~factory()
-    {
-    }
-
-    void register_class(const Key& key, create_fun&& fun)
+    void register_class(const Key& key, const create_fun&& fun)
     {
         if (!_map.count(key))
         {
@@ -37,9 +31,9 @@ public:
     }
 };
 
-template <typename Base, typename Derived, typename Key> void register_factory(const Key& key)
+template <typename Base, typename Derived, typename Key = std::string> void register_factory(const Key& key)
 {
-    factory<Base>::instance().register_class(key, [] { return static_cast<Base*>(new Derived); });
+    factory<Base>::instance().register_class(key, []() -> Base* { return static_cast<Base*>(new Derived); });
 }
 
 } // namespace helix
